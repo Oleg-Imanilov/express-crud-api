@@ -21,6 +21,7 @@ const allowAllButNoDelete = allow({
 });
 
 const apiConfig = {
+    database: 'fs',                 // 'fs' or 'nedb' ( default 'nedb' )
     title: "My API",                // default 'API'
     description: 'Generated API',   // default 'Generated API'
     version: '1.0',                 // default '1.0'
