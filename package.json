@@ -1,11 +1,12 @@
 {
-  "name": "express-crud-api",
+  "name": "express-crud-api-swagger",
   "version": "1.0.0",
   "description": "Easy way to create express app with crud API and swagger",
   "main": "index.js",
   "keywords": ["express", "crud", "swagger"],
   "author": "Oleg Imanilov",
   "license": "ISC",
+
   "dependencies": {
     "express": "^4.17.1",
     "nedb": "^1.8.0",
