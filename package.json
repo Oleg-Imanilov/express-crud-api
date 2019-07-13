@@ -6,7 +6,10 @@
   "keywords": ["express", "crud", "swagger"],
   "author": "Oleg Imanilov",
   "license": "ISC",
-
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/Oleg-Imanilov/express-crud-api.git"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "nedb": "^1.8.0",
