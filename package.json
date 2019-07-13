@@ -1,14 +1,10 @@
 {
   "name": "express-crud-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Easy way to create express app with crud API and swagger",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon server/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
+  "keywords": ["express", "crud", "swagger"],
+  "author": "Oleg Imanilov",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
