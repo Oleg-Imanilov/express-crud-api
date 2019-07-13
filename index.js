@@ -18,12 +18,14 @@ const setup = (app, apiConfig) => {
     } = apiConfig;
 
     let driver;
-    switch(database) {
-// TODO: add more db drivers
+    switch (database) {
+        case 'fs':
+            driver = require('./express-crud-fs-driver');
+            break;
         case 'nedb':
         default:
-        driver =  require('./express-crud-nedb-driver');
-    } 
+            driver = require('./express-crud-nedb-driver');
+    }
 
     if (!collections) {
         throw 'API config must have collections array'
@@ -39,7 +41,7 @@ const setup = (app, apiConfig) => {
         }
         swaggerAddTable(swaggerDocument, apiPrefix, name, fields);
         const crudRouter = router(name, fields, permit, driver);
-        app.use(`${apiPrefix}/${name}`, crudRouter );
+        app.use(`${apiPrefix}/${name}`, crudRouter);
     });
     app.use(docPath, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
