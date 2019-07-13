@@ -1,6 +1,6 @@
 {
   "name": "express-crud-api-swagger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Easy way to create express app with crud API and swagger",
   "main": "index.js",
   "keywords": ["express", "crud", "swagger"],
