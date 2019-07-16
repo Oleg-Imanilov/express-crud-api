@@ -41,9 +41,19 @@ const update = (table, _id, newObj) => {
     })
 }
 
-const findAll = (table) => {
+const findAll = (table, options = {}) => {
     return new Promise((accept, reject) => {
-        collection(table).find({}, (err, docs) => {
+        let {page, pageSize, ord, dir} = options;
+        
+        let findAll = collection(table).find({});
+        if(page !== undefined || pageSize !== undefined || ord !== undefined) {
+            page = page || 0;
+            pageSize = pageSize || 10;
+            ord = ord || '_id';
+            dir = dir || 'asc';
+            findAll = findAll.sort({ [ord]: dir==='asc'?1:-1}).skip(page*pageSize).limit(pageSize);
+        }
+        findAll.exec((err, docs) => {
             if (!err) {
                 accept(docs);
             } else {
