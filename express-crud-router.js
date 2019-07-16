@@ -13,7 +13,7 @@ const sendError = (res, err) => {
  * 
  * - POST /table/     - insert
  * - PUT  /table/:id  - update by id
- * - GET  /table/     - get all. // TODO: Paginated query: [ord, dir, page, sz] defaults: ord = _id, dir = desc, page = 0, sz = (page||ord||dir) ? 10 : infinity 
+ * - GET  /table/     - get all. // or Paginated query: [ord, dir, page, pageSize] defaults: ord = _id, dir = desc, page = 0, pageSize = (page||ord||dir) ? 10 : infinity 
  * - GET  /table/:id  - get one doc by id
  * - DELETE  /table/:id  - delete one doc by id
  * 
@@ -61,12 +61,18 @@ module.exports = (table, fields, crudPermit, driver) => {
 
     });
 
-    // TODO: pagination & query params
     router.get('/', (req, res) => {
         if (!crudPermit.canFindAll(req)) {
             sendError(res, { status: 403, message: `Forbiden operation` });
         } else {
-            driver.findAll(table)
+            const options = {
+                page: req.query.page, 
+                pageSize: req.query.pageSize, 
+                ord: req.query.ord, 
+                dir: req.query.dir
+            }
+
+            driver.findAll(table, options)
                 .then(d => res.send(d))
                 .catch((err) => {
                     sendError(res, err);
