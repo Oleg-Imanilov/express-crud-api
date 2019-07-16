@@ -19,10 +19,10 @@ module.exports = {
         };
 
         fields.forEach((f) => {
-            if(f.type==='array') {
-                doc.definitions[table].properties[f.name] = { type: 'array', items: {type: 'string'}};
+            if (f.type === 'array') {
+                doc.definitions[table].properties[f.name] = { type: 'array', items: { type: 'string' } };
             } else {
-                doc.definitions[table].properties[f.name] = { type: f.type || 'string' }; 
+                doc.definitions[table].properties[f.name] = { type: f.type || 'string' };
             }
         });
 
@@ -39,14 +39,17 @@ module.exports = {
                 'description': f.label,
                 'required': !!f.required,
             }
-            if(f.type === 'array') {
+            if (f.type === 'array') {
                 ret.type = 'array';
                 ret.items = { type: 'string' }
             } else {
                 ret.type = f.type || 'string'
-            }   
+            }
             return ret;
         });
+
+        const orderEnum = fields.map(f => f.name);
+        orderEnum.unshift('_id');
 
         doc.paths[`${apiPrefix}/${table}`] = {
             post: Object.assign({}, opt, {
@@ -58,6 +61,37 @@ module.exports = {
                 }
             }),
             get: Object.assign({}, opt, {
+                parameters: [
+                    {
+                        name: 'page',
+                        in: 'query',
+                        description: 'Page (starting from 0)',
+                        type: 'number'
+                    },
+                    {
+                        name: 'pageSize',
+                        in: 'query',
+                        description: 'Page Size (10 - if omitted)',
+                        type: 'number'
+                    },
+                    {
+                        name: 'ord',
+                        in: 'query',
+                        description: 'Sorting order ',
+                        type: 'string',
+                        enum: orderEnum
+                    },
+                    {
+                        name: 'dir',
+                        in: 'query',
+                        description: 'Sort direction (possible values: "asc" or " desc")',
+                        type: 'string',
+                        enum: [
+                            "asc",
+                            "desc"
+                        ]
+                    }
+                ],
                 responses: {
                     200: {
                         'description': `All ${table}s`, 'schema': {
@@ -85,12 +119,12 @@ module.exports = {
                 'required': false,
                 'description': f.label,
             }
-            if(f.type === 'array') {
+            if (f.type === 'array') {
                 ret.type = 'array';
                 ret.items = { type: 'string' }
             } else {
                 ret.type = f.type || 'string'
-            }   
+            }
             return ret;
         }));
 
@@ -117,7 +151,7 @@ module.exports = {
                     200: { 'description': 'Empty object', 'schema': {} },
                     403: { 'description': `Forbiden operation` },
                     404: { 'description': `Object not found` },
-                    500: { 'description': `Database or internal error` }                    
+                    500: { 'description': `Database or internal error` }
                 }
             })
         }
