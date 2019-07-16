@@ -60,15 +60,31 @@ const update = (table, _id, newObj) => {
     });
 }
 
-const findAll = (table) => {
+const findAll = (table, options = {}) => {
     return new Promise((accept, reject) => {
+        let { page, pageSize, ord, dir } = options;
         try {
-            const { dir } = testDir(table);
-            const files = fs.readdirSync(dir);
-            const docs = files.filter(f => f.match(/\.json$/).index>0).map((f) => {
-                const txt = fs.readFileSync(path.resolve(dir,f));
+            const { dir: folder } = testDir(table);
+            const files = fs.readdirSync(folder);
+            let docs = files.filter(f => f.match(/\.json$/).index > 0).map((f) => {
+                const txt = fs.readFileSync(path.resolve(folder, f));
                 return JSON.parse(txt);
             });
+
+            if (page !== undefined || pageSize !== undefined || ord !== undefined) {
+                page = page || 0;
+                pageSize = pageSize || 10;
+                ord = ord || '_id';
+                dir = dir || 'asc';
+                const start = page * pageSize;
+                const end = start + pageSize;
+                docs = docs.sort((a, b) => { 
+                    const aa = a[ord], bb = b[ord]; 
+                    return aa == bb ? 0 : (dir === 'asc' ? (aa < bb ? -1 : 1) : (aa < bb ? 1 : -1)) 
+                }).filter((d, ix) => {
+                    return ix >= start && ix < end;
+                });
+            }
             accept(docs);
         } catch (err) {
             console.error('FS error:' + err);
