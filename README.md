@@ -1,10 +1,10 @@
-# express-crud-api
+# express-crud-api-swagger
 Easy way to create express app with crud API and swagger
 
 ## Install
 
 ```
-npm install express-crud-api
+npm install express-crud-api-swagger
 ```
 
 ## Example od usage
@@ -13,7 +13,7 @@ npm install express-crud-api
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { setup, Field } = require('express-crud-api');
+const { setup, Field } = require('express-crud-api-swagger');
 
 const app = express();
 
